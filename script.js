@@ -1,3 +1,9 @@
+// Load the optional motion layer after the base styles.
+const motionStyles = document.createElement('link');
+motionStyles.rel = 'stylesheet';
+motionStyles.href = 'animations.css';
+document.head.appendChild(motionStyles);
+
 const menuButton = document.querySelector('.menu-toggle');
 const nav = document.querySelector('.site-nav');
 
@@ -56,6 +62,20 @@ if (reducedMotion || !('IntersectionObserver' in window)) {
     });
   }, { threshold: 0.12 });
   revealItems.forEach((element) => observer.observe(element));
+
+  // A subtle desktop-only pointer light follows the visitor without affecting touch devices.
+  if (window.matchMedia('(pointer: fine)').matches) {
+    window.addEventListener('pointermove', (event) => {
+      document.documentElement.style.setProperty('--pointer-x', `${event.clientX}px`);
+      document.documentElement.style.setProperty('--pointer-y', `${event.clientY}px`);
+    }, { passive: true });
+  }
+
+  // Keep navigation clear while the visitor moves down the page.
+  const header = document.querySelector('.site-header');
+  const updateHeader = () => header?.classList.toggle('is-scrolled', window.scrollY > 42);
+  updateHeader();
+  window.addEventListener('scroll', updateHeader, { passive: true });
 }
 
 document.getElementById('year').textContent = new Date().getFullYear();

@@ -1,6 +1,15 @@
 const menuButton = document.querySelector('.menu-toggle');
 const nav = document.querySelector('.site-nav');
 
+// Add the certificates page to the portfolio's existing navigation.
+if (nav && !nav.querySelector('[href="certificates.html"]')) {
+  const certificatesLink = document.createElement('a');
+  certificatesLink.href = 'certificates.html';
+  certificatesLink.textContent = 'Certificates';
+  const contactLink = nav.querySelector('.nav-contact');
+  nav.insertBefore(certificatesLink, contactLink);
+}
+
 menuButton?.addEventListener('click', () => {
   const isOpen = nav.classList.toggle('open');
   menuButton.setAttribute('aria-expanded', String(isOpen));
